@@ -4,16 +4,18 @@ import type { NextRequest } from "next/server";
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
+  // conditioning statement
   if (request.nextUrl.pathname.startsWith("/about")) {
-    return NextResponse.rewrite(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   if (request.nextUrl.pathname.startsWith("/blog")) {
-    return NextResponse.rewrite(new URL("/dashboard/user", request.url));
+    // keeps same url '/blog' but show url content '/'
+    return NextResponse.rewrite(new URL("/", request.url));
   }
 }
 
-// See "Matching Paths" below to learn more
+// matcher path
 export const config = {
   matcher: ["/about", "/blog"],
 };
