@@ -1,0 +1,31 @@
+Error handling page:
+    create a custom page --> ex: 404.tsx, 500.tsx, ...
+    add custom error page --> _error.tsx 
+
+Middleware: run the code before is the request completed using:
+    conditionning statement:
+    matcher: url, url list
+
+Internationalized routing: switch language with router 
+    ex: .../fr/blog --> .../en/blog
+
+react 18 features: we can use all react 18 new features along side nextjs
+
+build-in:
+    link - 
+    image - 
+    router - 
+    script (execute script --> internal / external)
+    head --> add additional headers (seo purpose, ...)
+
+Rendering:
+    CSR: same as react --> useffect, ...
+    SSR: data is loaded from the server
+    SSG: page is generated on build time on server, immediately display to user
+    ISR: same as SSG attempt to re-generate the page every "certain interval of time in seconds"
+
+
+Environment variable: 
+    .env.local --> call this way (process.env.VARIABLE_NAME)
+
+Eslint: yarn lint --> linting code / verify linting warings & errors
