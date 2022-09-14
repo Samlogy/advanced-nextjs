@@ -8,6 +8,8 @@ const languages = ["fr", "en"];
 export default function LanguageSwitcher() {
   const router = useRouter();
 
+  //console.log(router);
+
   const { locale } = useLocale();
 
   const changeLanguage = (e: any) => {
