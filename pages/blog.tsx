@@ -46,7 +46,13 @@ export default function Blog() {
     setCount((c) => c + 1);
   };
 
-  /// useCallBack
+  /// useState
+  const [text, setText] = useState("");
+
+  const handleInput = (e: any) => {
+    const { type, value } = e.target;
+    setText((t: string) => t + value);
+  };
 
   return (
     <div>
@@ -70,6 +76,9 @@ export default function Blog() {
         <h2>Expensive Calculation</h2>
         {calculation}
       </div>
+
+      <h1>useState</h1>
+      <input type="text" onChange={handleInput} />
     </div>
   );
 }
