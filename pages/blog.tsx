@@ -1,4 +1,49 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useReducer,
+} from "react";
+
+const initialTodos = [
+  {
+    id: 1,
+    title: "Todo 1",
+    complete: false,
+  },
+  {
+    id: 2,
+    title: "Todo 2",
+    complete: false,
+  },
+  {
+    id: 3,
+    title: "Todo 3",
+    complete: false,
+  },
+  {
+    id: 4,
+    title: "Todo 4",
+    complete: false,
+  },
+];
+
+const reducer = (state: any, action: any) => {
+  switch (action.type) {
+    case "COMPLETE":
+      return state.map((todo: any) => {
+        if (todo.id === action.id) {
+          return { ...todo, complete: !todo.complete };
+        } else {
+          return todo;
+        }
+      });
+    default:
+      return state;
+  }
+};
 
 export default function Blog() {
   const [count, setCount] = useState(0);
@@ -54,14 +99,31 @@ export default function Blog() {
     setText((t: string) => t + value);
   };
 
+  //useCallback
+  const [todos, setTodos] = useState<any>([]);
+  const addTodo = useCallback(() => {
+    const len = todos.length + 1;
+    const todo = len > 0 ? `todo ${len}` : "todo 1";
+    setTodos((t: any) => [...t, todo]);
+  }, [todos]);
+
+  console.log(todos);
+
+  // useReducer
+  const [tasks, dispatch] = useReducer(reducer, initialTodos);
+  const handleComplete = (task: any) => {
+    dispatch({ type: "COMPLETE", id: task.id });
+  };
+  console.log(tasks);
+
   return (
     <div>
-      <h1>useEffect</h1>
+      <h3>useEffect</h3>
       <button onClick={() => setCount(count + 1)}> + </button>
       <span> {count} </span>
       <button onClick={() => setCount(count - 1)}> - </button>
 
-      <h1>useRef</h1>
+      <h3>useRef</h3>
       <input
         type="text"
         value={inputValue}
@@ -69,7 +131,7 @@ export default function Blog() {
       />
       <span>Render Count: {countRender.current}</span>
 
-      <h1>useMemo</h1>
+      <h3>useMemo</h3>
       <div>
         Count: {count}
         <button onClick={increment}>+</button>
@@ -77,8 +139,27 @@ export default function Blog() {
         {calculation}
       </div>
 
-      <h1>useState</h1>
+      <h3>useState</h3>
       <input type="text" onChange={handleInput} />
+
+      <h3>useCallback</h3>
+      <button onClick={addTodo}> + Todo</button>
+
+      <h3> useReducer </h3>
+      {tasks.map((task: any) => (
+        <div key={task.id}>
+          <label
+            style={{ textDecoration: task.complete ? "line-through" : "none" }}
+          >
+            <input
+              type="checkbox"
+              checked={task.complete}
+              onChange={() => handleComplete(task)}
+            />
+            {task.title}
+          </label>
+        </div>
+      ))}
     </div>
   );
 }
