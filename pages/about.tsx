@@ -1,11 +1,28 @@
 import { useAmp } from "next/amp";
 import Image from "next/image";
-
+import { useContext, useRef, useState } from "react";
+import { TodosContext } from "../contexts/todoContext";
 // amp page configuration
 export const config = { amp: "hybrid" };
 
 const About = ({ users }: { users: any }) => {
   const isAmp = useAmp();
+
+  // context api logic
+  const { todos, dispatch } = useContext(TodosContext);
+
+  const [todo, setTodo] = useState("");
+  const inputRef = useRef<any>(null);
+
+  const handleSubmit = (e: any) => {
+    //   e.preventDefault();
+    inputRef.current.focus();
+    dispatch({ type: "ADD_TODO", todo: inputRef.current.value });
+    // setTodo("");
+    inputRef.current.value = "";
+  };
+
+  console.log(todos);
 
   return (
     <div>
@@ -26,6 +43,20 @@ const About = ({ users }: { users: any }) => {
           alt="a cool image"
         />
       )}
+
+      <input
+        type="text"
+        placeholder="todo..."
+        name="todo"
+        ref={inputRef}
+        required
+        //onChange={(e) => setTodo(e.target.value)}
+        //value={todo}
+      />
+
+      <button type="submit" onClick={handleSubmit}>
+        add todo
+      </button>
 
       {users &&
         users.map((user: any, idx: number) => (
@@ -56,8 +87,8 @@ export default About;
 
 // ISR
 export async function getStaticProps() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users = await res.json();
+  // const res = await fetch("https://jsonplaceholder.typicode.com/users");
+  const users = []; //await res.json();
 
   return {
     props: {
