@@ -28,6 +28,26 @@ const Home: NextPage = () => {
   console.log(process.env);
   // display NEXT_PUBLIC_ANALYTICS_ID variable
   console.log(process.env.NEXT_PUBLIC_ANALYTICS_ID);
+
+  // Switch case replacement (with dictionary) keys (condition) --> value matched condition
+  // we can also use Map data structure
+  const extentions = {
+    ".css": "text/css",
+    ".js": "text/jsavascript",
+    ".json": "appilcation/json",
+  };
+  console.log(extentions[".css"]);
+
+  // checking empty arrays
+  const arr: any = [];
+  console.log(Array.isArray(arr) && arr.length > 0 ? true : false);
+
+  /* AVOID state mistakes:  */
+  // use callback to set / update the state
+  // setCount(prevState => prevState + 1)
+
+  // do not complexify the state, if its not necessary
+
   return (
     <>
       <Head>
@@ -60,6 +80,8 @@ const Home: NextPage = () => {
           onError={() => onError()}
         />
       </div>
+
+      <h2>Switch case replacement</h2>
     </>
   );
 };
