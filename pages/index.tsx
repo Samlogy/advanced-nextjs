@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Script from "next/script";
+import { useState, useEffect, useCallback } from "react";
 
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
@@ -48,6 +49,20 @@ const Home: NextPage = () => {
 
   // do not complexify the state, if its not necessary
 
+  // useCallback --> prevent function re-execution: (trigger it only when states function inside callback is updated)
+  // memoiazing the fct and triggers the fct only when state of callBAck dependency array changes
+  const [state1, setState1] = useState(1);
+  const [state2, setState2] = useState(1);
+  const [state3, setState3] = useState(1);
+
+  const sum = useCallback(
+    () => state1 + state2 + state3,
+    [state1, state2, state3]
+  );
+
+  useEffect(() => {
+    console.log("res: ", sum());
+  });
   return (
     <>
       <Head>
