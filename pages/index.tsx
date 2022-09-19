@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Script from "next/script";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
@@ -55,13 +55,20 @@ const Home: NextPage = () => {
   const [state2, setState2] = useState(1);
   const [state3, setState3] = useState(1);
 
-  const sum = useCallback(
+  // returns a number (summed states)
+  const sumMemo: number = useMemo(
+    () => state1 + state2 + state3,
+    [state1, state2, state3]
+  );
+  // fct return a number (sum)
+  const sumCallback: () => number = useCallback(
     () => state1 + state2 + state3,
     [state1, state2, state3]
   );
 
   useEffect(() => {
-    console.log("res: ", sum());
+    console.log("sum memo: ", sumMemo);
+    console.log("sum callback: ", sumCallback());
   });
   return (
     <>
