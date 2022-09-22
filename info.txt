@@ -29,3 +29,8 @@ Environment variable:
     .env.local --> call this way (process.env.VARIABLE_NAME)
 
 Eslint: yarn lint --> linting code / verify linting warings & errors
+
+Debouncing: used for optimizing the performance. 
+            It is done by limiting the rate of execution of a particular function 
+            (also known as rate limiting).
+Throttling: is same as debounce --> limiting the rate of execution of function

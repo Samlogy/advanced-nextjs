@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 
 export default function Posts() {
   const [users, setUsers] = useState([]);
@@ -24,16 +24,6 @@ export default function Posts() {
 const Filter = ({ users, setSearch }: any) => {
   const handleSubmit = (e: any) => e.preventDefault();
 
-  // timeout fct 500ms
-  const debounceV1 = (e: any) => {
-    setTimeout(() => {
-      onHandleChange(e);
-    }, 500);
-  };
-
-  // memoize + timeout fct 500ms
-  const debounceV2 = useCallback(debounceV1, []);
-
   // no optimization
   const onHandleChange = (e: any) => {
     const target = e.target;
@@ -51,16 +41,46 @@ const Filter = ({ users, setSearch }: any) => {
 
     setSearch(result);
   };
+  // timeout fct 500ms
+  const debounceV1 = (e: any) => {
+    setTimeout(() => {
+      onHandleChange(e);
+    }, 1000);
+  };
+
+  // memoize + timeout fct 500ms
+  const debounceV2 = useCallback(debounceV1, []);
+
+  // callBack + timeout (500ms) + clear fct
+  const debounceV3 = (func: any) => {
+    let timer: any;
+    return (...args: any) => {
+      const context = this;
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
+        func.apply(context, args);
+      }, 650);
+    };
+  };
+  const optimizedV3 = useCallback(debounceV3(onHandleChange), []);
+  console.log(optimizedV3);
+
+  // use loadash --> import { debounce } from "lodash";
+
+  const debounceV4 = useRef<any>(debounceV1).current;
+
+  const debounceV5 = useRef(useCallback(debounceV1, []));
 
   return (
     <div>
-      <form className="search" onSubmit={debounceV2}>
+      <form className="search" onSubmit={handleSubmit}>
         <input
           className="search__input"
           type="text"
           id="search"
-          placeholder="Name or Email Username"
-          onChange={onHandleChange}
+          placeholder="Name or Email"
+          onChange={optimizedV3}
           autoFocus
         />
         <button className="search__button">Search</button>
@@ -91,3 +111,9 @@ const Listing = ({ search }: any) => {
 
   return <main>{content}</main>;
 };
+
+function useDebounceV5(callback: any, delay: number) {
+  const debounce = callback;
+
+  return debounce;
+}
