@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
-export default function posts() {
+export default function Posts() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState([]);
 
@@ -24,11 +24,28 @@ export default function posts() {
 const Filter = ({ users, setSearch }: any) => {
   const handleSubmit = (e: any) => e.preventDefault();
 
-  const handleSearchChange = (e: any) => {
-    const value = e.target.value;
-    if (!value) return setSearch(users);
+  // timeout fct 500ms
+  const debounceV1 = (e: any) => {
+    setTimeout(() => {
+      onHandleChange(e);
+    }, 500);
+  };
 
-    const result = users?.filter((user: any) => user.name.includes(value));
+  // memoize + timeout fct 500ms
+  const debounceV2 = useCallback(debounceV1, []);
+
+  // no optimization
+  const onHandleChange = (e: any) => {
+    const target = e.target;
+    let value = target.type == "checkbox" ? target.checked : target.value;
+    if (!value) return setSearch(users);
+    value.toLowerCase();
+
+    const result = users?.filter(
+      (user: any) =>
+        user.name.toLowerCase().includes(value) ||
+        user.email.toLowerCase().includes(value)
+    );
 
     console.log(result);
 
@@ -37,13 +54,14 @@ const Filter = ({ users, setSearch }: any) => {
 
   return (
     <div>
-      <form className="search" onSubmit={handleSubmit}>
+      <form className="search" onSubmit={debounceV2}>
         <input
           className="search__input"
           type="text"
           id="search"
-          placeholder="Search ..."
-          onChange={handleSearchChange}
+          placeholder="Name or Email Username"
+          onChange={onHandleChange}
+          autoFocus
         />
         <button className="search__button">Search</button>
       </form>
