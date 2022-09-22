@@ -4,13 +4,17 @@ export default function Posts() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState([]);
 
-  useEffect(() => {
+  const loadUsers = useCallback(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
       .then((json) => {
         setUsers(json);
         setSearch(json);
       });
+  }, []);
+
+  useEffect(() => {
+    loadUsers();
   }, []);
 
   return (
@@ -45,7 +49,7 @@ const Filter = ({ users, setSearch }: any) => {
   const debounceV1 = (e: any) => {
     setTimeout(() => {
       onHandleChange(e);
-    }, 1000);
+    }, 500);
   };
 
   // memoize + timeout fct 500ms
@@ -64,14 +68,14 @@ const Filter = ({ users, setSearch }: any) => {
     };
   };
   const optimizedV3 = useCallback(debounceV3(onHandleChange), []);
-  console.log(optimizedV3);
 
   // use loadash --> import { debounce } from "lodash";
 
-  const debounceV4 = useRef<any>(debounceV1).current;
-
-  const debounceV5 = useRef(useCallback(debounceV1, []));
-
+  const debounceV4 = useRef(debounceV1).current;
+  // timeout + callback + ref
+  const debounceV5 = useRef(useCallback(debounceV1, [])).current;
+  // version + ref
+  const debounceV6 = useRef(optimizedV3).current;
   return (
     <div>
       <form className="search" onSubmit={handleSubmit}>
@@ -80,7 +84,7 @@ const Filter = ({ users, setSearch }: any) => {
           type="text"
           id="search"
           placeholder="Name or Email"
-          onChange={optimizedV3}
+          onChange={debounceV6}
           autoFocus
         />
         <button className="search__button">Search</button>

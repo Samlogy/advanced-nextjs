@@ -18,7 +18,7 @@ build-in:
     script (execute script --> internal / external)
     head --> add additional headers (seo purpose, ...)
 
-Rendering:
+Rendering (Nextjs):
     CSR: same as react --> useffect, ...
     SSR: data is loaded from the server
     SSG: page is generated on build time on server, immediately display to user
@@ -33,4 +33,6 @@ Eslint: yarn lint --> linting code / verify linting warings & errors
 Debouncing: used for optimizing the performance. 
             It is done by limiting the rate of execution of a particular function 
             (also known as rate limiting).
-Throttling: is same as debounce --> limiting the rate of execution of function
+
+Throttling: is same as debounce --> limiting the rate of execution of function.
+
