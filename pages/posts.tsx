@@ -11,13 +11,11 @@ export default function Posts() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState([]);
 
-  const loadUsers = useCallback(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((res) => res.json())
-      .then((json) => {
-        setUsers(json);
-        setSearch(json);
-      });
+  const loadUsers = useCallback(async () => {
+    let res: any = await fetch("https://jsonplaceholder.typicode.com/users");
+    res = await res.json();
+    setUsers(res);
+    setSearch(res);
   }, []);
 
   useEffect(() => {
