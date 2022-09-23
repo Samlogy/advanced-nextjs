@@ -75,7 +75,9 @@ const Filter = ({ users, setSearch }: any) => {
   // timeout + callback + ref
   const debounceV5 = useRef(useCallback(debounceV1, [])).current;
   // version + ref
-  const debounceV6 = useRef(optimizedV3).current;
+  const debounceV6 = useRef(optimizedV3).current; //useDebounce(debounceV3(onHandleChange), 500)
+  // same as V6 by with custom hook
+  const debounceV7 = useDebounce(optimizedV3);
   return (
     <div>
       <form className="search" onSubmit={handleSubmit}>
@@ -84,7 +86,7 @@ const Filter = ({ users, setSearch }: any) => {
           type="text"
           id="search"
           placeholder="Name or Email"
-          onChange={debounceV6}
+          onChange={debounceV7}
           autoFocus
         />
         <button className="search__button">Search</button>
@@ -116,8 +118,8 @@ const Listing = ({ search }: any) => {
   return <main>{content}</main>;
 };
 
-function useDebounceV5(callback: any, delay: number) {
-  const debounce = callback;
-
+function useDebounce(callback: any, delay = 500) {
+  let debounce = useCallback(callback, [delay]);
+  debounce = useRef(debounce).current;
   return debounce;
 }
