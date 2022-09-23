@@ -1,4 +1,11 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  useDebugValue,
+} from "react";
+import useDebounce from "../hooks/useDebounce";
 
 export default function Posts() {
   const [users, setUsers] = useState([]);
@@ -17,10 +24,27 @@ export default function Posts() {
     loadUsers();
   }, []);
 
+  // HOC: (conditional rendering)
+  const withLoading = (Component: any) => {
+    return function EnhancedComponent({ isLoading, ...props }: any) {
+      if (!isLoading) {
+        return <Component {...props} />;
+      }
+      return <div>The component is loading</div>;
+    };
+  };
+
+  // create a new component using HOC
+  const HocLoading = withLoading(Component);
+
   return (
     <div>
+      {/* 
       <Filter users={users} setSearch={setSearch} />
       <Listing search={search} />
+     */}
+
+      <HocLoading isLoading={false} />
     </div>
   );
 }
@@ -76,8 +100,11 @@ const Filter = ({ users, setSearch }: any) => {
   const debounceV5 = useRef(useCallback(debounceV1, [])).current;
   // version + ref
   const debounceV6 = useRef(optimizedV3).current; //useDebounce(debounceV3(onHandleChange), 500)
-  // same as V6 by with custom hook
-  const debounceV7 = useDebounce(optimizedV3);
+  // same as V6 by with custom hook instead of fct
+  const debounceV7 = useDebounce(onHandleChange);
+
+  // useDebugValue
+  useDebugValue("Filter cpt");
   return (
     <div>
       <form className="search" onSubmit={handleSubmit}>
@@ -99,7 +126,16 @@ const Listing = ({ search }: any) => {
   const results = search?.map((user: any, idx: number) => (
     <div
       key={idx}
-      style={{ display: "flex", flexDirection: "column", margin: ".5em 0" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        margin: ".5em 0",
+        backgroundColor: "lightgray",
+        width: "10em",
+        padding: ".5em",
+        borderRadius: ".5em",
+        overflow: "hidden",
+      }}
     >
       <span> {user?.id} </span>
       <span> {user?.name} </span>
@@ -118,8 +154,10 @@ const Listing = ({ search }: any) => {
   return <main>{content}</main>;
 };
 
-function useDebounce(callback: any, delay = 500) {
-  let debounce = useCallback(callback, [delay]);
-  debounce = useRef(debounce).current;
-  return debounce;
-}
+const Component = (props: any) => {
+  return (
+    <div>
+      <h3> Component Loaded </h3>
+    </div>
+  );
+};
