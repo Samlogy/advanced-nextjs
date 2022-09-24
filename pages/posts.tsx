@@ -1,15 +1,10 @@
 import {
   Box,
-  Button,
-  Heading,
-  Text,
-  chakra,
-  Input,
-  Flex,
+  Button, Flex, Heading, Input, Text
 } from "@chakra-ui/react";
 import { useCallback, useDebugValue, useEffect, useRef, useState } from "react";
-import Image from "next/image";
 
+import ReactDOM from "react-dom";
 import useDebounce from "../lib/hooks/useDebounce";
 import useThrottle from "../lib/hooks/useThrottle";
 
@@ -49,6 +44,8 @@ export default function Posts() {
      */}
 
       <HocLoading isLoading={false} />
+
+      <PortalsExample />
     </div>
   );
 }
@@ -111,7 +108,7 @@ const Filter = ({ users, setSearch }: any) => {
   useDebugValue("Filter cpt");
   return (
     <div>
-      <h4> Example Debouncing </h4>
+      <Heading> Example Debouncing </Heading>
       <form onSubmit={handleSubmit}>
         <Input
           type="text"
@@ -178,7 +175,7 @@ const Component = (props: any) => {
   return (
     <div>
       <h3> Component Loaded </h3>
-      <h4> Example Throttling </h4>
+      <Heading> Example Throttling </Heading>
       <Flex justify="center" align="center">
         <Button onClick={throttledInc}> +</Button>
         <Box as="span" mx="1em">
@@ -186,6 +183,59 @@ const Component = (props: any) => {
         </Box>
         <Button onClick={throttledDec}>-</Button>
       </Flex>
+    </div>
+  );
+};
+
+const PortalsExample = () => {
+  const [isOpen, setOpen] = useState({
+    portals: false,
+    noPortals: false,
+  });
+
+  function ModalCpt(onClose: () => void) {
+    return (
+      <Flex flexDir="column" boxShadow="md" w="fit-content" p="1em">
+        <Button onClick={onClose} w="fit-content">
+          Close
+        </Button>
+        <Text>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam, facere.</Text>
+      </Flex>
+    );
+  }
+
+  function togglePortals(action: boolean) {
+    setOpen((prev) => {
+      return {
+        ...prev,
+        portals: action,
+      };
+    });
+  }
+  function toggleModal(action: boolean) {
+    setOpen((prev) => {
+      return {
+        ...prev,
+        noPortals: action,
+      };
+    });
+  }
+
+  return (
+    <div className="component">
+      <Heading> Portals Example --> Modal </Heading>
+
+      <Button onClick={() => toggleModal(true)}>Open Modal</Button>
+      <Button onClick={() => togglePortals(true)}>Open Modal Portal</Button>
+
+      {isOpen.portals &&
+        ReactDOM.createPortal(
+          ModalCpt( () => togglePortals(false)),
+          document.body
+        )}
+
+      {isOpen.noPortals &&
+        ModalCpt( () => toggleModal(false))}
     </div>
   );
 };

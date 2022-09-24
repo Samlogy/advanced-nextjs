@@ -33,6 +33,14 @@ Eslint: yarn lint --> linting code / verify linting warings & errors
 Debouncing: used for optimizing the performance. 
             It is done by limiting the rate of execution of a particular function 
             (also known as rate limiting).
+            ex: avoid rendenring every time we update a state
 
 Throttling: is same as debounce --> limiting the rate of execution of function.
+    ex: avoid multiple click on button that triggers the same function
 
+NB: throttling & debouncing improve code optimization
+
+Portals: The Portal's most common use cases are when the child components need to visually break out of the parent container
+    ex: Modal - notification - toast - alerts - tooltips - loaders - ...
+
+HOC: Higher Order Component --> a fct that calls another fct which can be used for create a cpt / condition rendering
