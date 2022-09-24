@@ -101,7 +101,6 @@ const Cart = () => {
     </VStack>
   );
 };
-
 const Details = () => {
   const colSpan = useBreakpointValue({ base: 2, md: 1 });
   return (
@@ -150,7 +149,7 @@ const Details = () => {
           <Checkbox defaultChecked>Ship to billing address.</Checkbox>
         </GridItem>
         <GridItem colSpan={2}>
-          <Button size="lg" w="full">
+          <Button variant="primary" size="lg" w="full">
             Place Order
           </Button>
         </GridItem>
