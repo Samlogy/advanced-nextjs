@@ -2,6 +2,7 @@ import {
   Box,
   Button, Flex, Heading, Input, Text
 } from "@chakra-ui/react";
+import React from "react";
 import { useCallback, useDebugValue, useEffect, useRef, useState } from "react";
 
 import ReactDOM from "react-dom";
@@ -36,6 +37,8 @@ export default function Posts() {
   // create a new component using HOC
   const HocLoading = withLoading(Component);
 
+  const ref = useRef<any>(null)
+
   return (
     <div>
       {/* 
@@ -44,8 +47,8 @@ export default function Posts() {
      */}
 
       <HocLoading isLoading={false} />
-
       <PortalsExample />
+      <ForwardRefExample parentRef={ref} />
     </div>
   );
 }
@@ -239,3 +242,17 @@ const PortalsExample = () => {
     </div>
   );
 };
+
+
+const ForwardRefExample = React.forwardRef(({parentRef}: {parentRef:any}) => {
+  console.log('parent ref: ',parentRef)
+  return(
+    <Flex flexDir="column">
+      <Heading>
+        Forward Reference Example
+      </Heading>
+      <Text> check console log</Text>
+    </Flex>
+  )
+})
+

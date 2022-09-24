@@ -44,3 +44,6 @@ Portals: The Portal's most common use cases are when the child components need t
     ex: Modal - notification - toast - alerts - tooltips - loaders - ...
 
 HOC: Higher Order Component --> a fct that calls another fct which can be used for create a cpt / condition rendering
+
+ForwardRef: its a ref that is passed to child cpt from parent cpt the child cpt must wrapped
+    ex: React.forwardRef(component)
