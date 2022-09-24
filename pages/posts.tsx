@@ -1,9 +1,17 @@
-import { Box, Button, Heading, Text, chakra } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  Text,
+  chakra,
+  Input,
+  Flex,
+} from "@chakra-ui/react";
 import { useCallback, useDebugValue, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 import useDebounce from "../lib/hooks/useDebounce";
-import img from "../public/screen.png";
+import useThrottle from "../lib/hooks/useThrottle";
 
 export default function Posts() {
   const [users, setUsers] = useState([]);
@@ -103,16 +111,16 @@ const Filter = ({ users, setSearch }: any) => {
   useDebugValue("Filter cpt");
   return (
     <div>
-      <form className="search" onSubmit={handleSubmit}>
-        <input
-          className="search__input"
+      <h4> Example Debouncing </h4>
+      <form onSubmit={handleSubmit}>
+        <Input
           type="text"
           id="search"
           placeholder="Name or Email"
           onChange={debounceV7}
           autoFocus
+          w="15em"
         />
-        <button className="search__button">Search</button>
       </form>
     </div>
   );
@@ -120,23 +128,19 @@ const Filter = ({ users, setSearch }: any) => {
 
 const Listing = ({ search }: any) => {
   const results = search?.map((user: any, idx: number) => (
-    <div
+    <Flex
       key={idx}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        margin: ".5em 0",
-        backgroundColor: "lightgray",
-        width: "10em",
-        padding: ".5em",
-        borderRadius: ".5em",
-        overflow: "hidden",
-      }}
+      flexDir="column"
+      p="1em"
+      boxShadow="md"
+      w="15em"
+      borderRadius="1em"
+      m=".25em"
     >
-      <span> {user?.id} </span>
-      <span> {user?.name} </span>
-      <span> {user?.email} </span>
-    </div>
+      <Box as="span"> {user?.id} </Box>
+      <Box as="span"> {user?.name} </Box>
+      <Box as="span"> {user?.email} </Box>
+    </Flex>
   ));
 
   const content = results?.length ? (
@@ -147,14 +151,41 @@ const Listing = ({ search }: any) => {
     </article>
   );
 
-  return <main>{content}</main>;
+  return (
+    <Flex flexWrap="wrap" justify="center" align="center">
+      {content}
+    </Flex>
+  );
 };
 
 const Component = (props: any) => {
+  const [count, setCount] = useState(0);
+
+  const throttledInc = useThrottle(increment, 1000);
+  const throttledDec = useThrottle(decrement, 1000);
+
+  function increment() {
+    setCount((prev) => prev + 1);
+    console.log("inc");
+  }
+  function decrement() {
+    setCount((prev) => {
+      return prev === 0 ? prev : prev - 1;
+    });
+    console.log("dec");
+  }
+
   return (
     <div>
       <h3> Component Loaded </h3>
-      <Button></Button>
+      <h4> Example Throttling </h4>
+      <Flex justify="center" align="center">
+        <Button onClick={throttledInc}> +</Button>
+        <Box as="span" mx="1em">
+          {count}
+        </Box>
+        <Button onClick={throttledDec}>-</Button>
+      </Flex>
     </div>
   );
 };

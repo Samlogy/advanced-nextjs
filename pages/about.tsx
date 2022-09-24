@@ -1,7 +1,7 @@
 import { useAmp } from "next/amp";
 import Image from "next/image";
 import { useContext, useRef, useState } from "react";
-import { TodosContext } from "../contexts/todoContext";
+import { TodosContext } from "../store/contexts/todoContext";
 // amp page configuration
 export const config = { amp: "hybrid" };
 
