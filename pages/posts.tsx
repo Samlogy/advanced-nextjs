@@ -1,11 +1,9 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  useDebugValue,
-} from "react";
-import useDebounce from "../hooks/useDebounce";
+import { Box, Button, Heading, Text, chakra } from "@chakra-ui/react";
+import { useCallback, useDebugValue, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+
+import useDebounce from "../lib/hooks/useDebounce";
+import img from "../public/screen.png";
 
 export default function Posts() {
   const [users, setUsers] = useState([]);
@@ -156,6 +154,7 @@ const Component = (props: any) => {
   return (
     <div>
       <h3> Component Loaded </h3>
+      <Button></Button>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import useLocale from "../hooks/useLocale";
+import useLocale from "../lib/hooks/useLocale";
 
 const languages = ["fr", "en"];
 
