@@ -47,3 +47,25 @@ HOC: Higher Order Component --> a fct that calls another fct which can be used f
 
 ForwardRef: its a ref that is passed to child cpt from parent cpt the child cpt must wrapped
     ex: React.forwardRef(component)
+
+Perfomence: (Increase)
+    fonts locally --> download & load them locally
+    do not download unnecessary assets
+    minifying css & js
+    using CDN
+    using code splitting
+    use cache
+    remove unused code
+    lazy loading videos
+    images: (use the right format)
+        jpeg & jpg (the same) --> Photos and artwork.
+        png > jpeg -->  illustrations and images (not piwelled like jpeg).
+        svg (small size, scaled, animated) -->  Illustrations, logos, and icons.
+        WebP > jpeg, png --> Photos, illustrations, etc.
+        GIF (animated images) --> bigger size (use video instead)
+
+        compress images to reduce size / redundancy
+        responsive images according device size
+        lazy load images
+        scale down images to resonable size (according to website size)
+    
