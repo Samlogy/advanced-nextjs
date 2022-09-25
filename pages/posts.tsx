@@ -2,10 +2,10 @@ import {
   Box,
   Button, Flex, Heading, Input, Text
 } from "@chakra-ui/react";
-import React from "react";
-import { useCallback, useDebugValue, useEffect, useRef, useState } from "react";
-
+import { motion, AnimatePresence } from 'framer-motion';
+import React, { useCallback, useDebugValue, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+
 import useDebounce from "../lib/hooks/useDebounce";
 import useThrottle from "../lib/hooks/useThrottle";
 
@@ -37,6 +37,7 @@ export default function Posts() {
   // create a new component using HOC
   const HocLoading = withLoading(Component);
 
+  // get all cookies in user
   const ref = useRef<any>(null)
 
   return (
@@ -45,10 +46,14 @@ export default function Posts() {
       <Filter users={users} setSearch={setSearch} />
       <Listing search={search} />
      */}
+     <Filter users={users} setSearch={setSearch} />
+      <Listing search={search} />
 
       <HocLoading isLoading={false} />
       <PortalsExample />
       <ForwardRefExample parentRef={ref} />
+
+      <Example />
     </div>
   );
 }
@@ -105,7 +110,7 @@ const Filter = ({ users, setSearch }: any) => {
   // version + ref
   const debounceV6 = useRef(optimizedV3).current; //useDebounce(debounceV3(onHandleChange), 500)
   // same as V6 by with custom hook instead of fct
-  const debounceV7 = useDebounce(onHandleChange);
+  const debounceV7 = useDebounce(onHandleChange, 500);
 
   // useDebugValue
   useDebugValue("Filter cpt");
@@ -117,7 +122,7 @@ const Filter = ({ users, setSearch }: any) => {
           type="text"
           id="search"
           placeholder="Name or Email"
-          onChange={debounceV7}
+          onChange={onHandleChange}
           autoFocus
           w="15em"
         />
@@ -130,12 +135,19 @@ const Listing = ({ search }: any) => {
   const results = search?.map((user: any, idx: number) => (
     <Flex
       key={idx}
+      as={motion.div}
+      layout
+      animate={{opacity: 1}}
+      initial={{scale: 1, opacity: 0}}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       flexDir="column"
       p="1em"
       boxShadow="md"
       w="15em"
       borderRadius="1em"
       m=".25em"
+      cursor="pointer"
     >
       <Box as="span"> {user?.id} </Box>
       <Box as="span"> {user?.name} </Box>
@@ -152,9 +164,11 @@ const Listing = ({ search }: any) => {
   );
 
   return (
-    <Flex flexWrap="wrap" justify="center" align="center">
-      {content}
-    </Flex>
+    <AnimatePresence>
+      <Flex flexWrap="wrap" justify="center" align="center">
+        {content}
+      </Flex>
+    </AnimatePresence>
   );
 };
 
@@ -256,3 +270,24 @@ const ForwardRefExample = React.forwardRef(({parentRef}: {parentRef:any}) => {
   )
 })
 
+function Example() {
+  return (
+   <>
+   <Heading> Framer motion + Chakra</Heading>
+    <Box
+      as={motion.div}
+      h="10em"
+      w="10em"
+      borderRadius="1em"
+      bg='orange.400'
+      drag='x'
+      dragConstraints={{ left: -100, right: 100 }}
+      initial={{scale: 1}}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      transition='0.5s linear'
+      // not work: transition={{ transition: "0.5", ease: "linear" }}
+    />
+   </>
+  )
+}
