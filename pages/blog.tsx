@@ -7,6 +7,8 @@ import {
   useReducer,
 } from "react";
 
+import Layout from "../components/Layout";
+
 const initialTodos = [
   {
     id: 1,
@@ -117,7 +119,7 @@ export default function Blog() {
   console.log(tasks);
 
   return (
-    <div>
+    <Layout isHeaderVisible>
       <h3>useEffect</h3>
       <button onClick={() => setCount(count + 1)}> + </button>
       <span> {count} </span>
@@ -160,6 +162,6 @@ export default function Blog() {
           </label>
         </div>
       ))}
-    </div>
+    </Layout>
   );
 }

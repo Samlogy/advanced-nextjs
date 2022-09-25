@@ -21,10 +21,11 @@ import {
   useColorModeValue,
   AspectRatio,
 } from "@chakra-ui/react";
+import Layout from "../components/Layout";
 
 export default function Shop() {
   return (
-    <Container maxW="container.xl" p={0}>
+    <Layout isHeaderVisible>
       <Flex
         h={{ base: "auto", md: "100vh" }}
         py={[0, 10, 20]}
@@ -33,7 +34,7 @@ export default function Shop() {
         <Details />
         <Cart />
       </Flex>
-    </Container>
+    </Layout>
   );
 }
 

@@ -5,6 +5,7 @@ import Script from "next/script";
 import { useState, useEffect, useCallback, useMemo } from "react";
 
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import Layout from "../components/Layout";
 
 const Home: NextPage = () => {
   // image loader
@@ -80,7 +81,7 @@ const Home: NextPage = () => {
         <meta property="og:title" content="My new title" key="title" />
       </Head>
 
-      <div>
+      <Layout isHeaderVisible>
         <h2>Home</h2>
         <LanguageSwitcher />
 
@@ -101,7 +102,7 @@ const Home: NextPage = () => {
           onReady={() => onReady()}
           onError={() => onError()}
         />
-      </div>
+      </Layout>
 
       <h2>Switch case replacement</h2>
     </>

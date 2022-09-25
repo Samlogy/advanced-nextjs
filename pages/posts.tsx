@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 
 import useDebounce from "../lib/hooks/useDebounce";
 import useThrottle from "../lib/hooks/useThrottle";
+import Layout from "../components/Layout";
 
 export default function Posts() {
   const [users, setUsers] = useState([]);
@@ -41,7 +42,7 @@ export default function Posts() {
   const ref = useRef<any>(null)
 
   return (
-    <div>
+    <Layout isHeaderVisible>
       {/* 
       <Filter users={users} setSearch={setSearch} />
       <Listing search={search} />
@@ -54,7 +55,7 @@ export default function Posts() {
       <ForwardRefExample parentRef={ref} />
 
       <Example />
-    </div>
+    </Layout>
   );
 }
 

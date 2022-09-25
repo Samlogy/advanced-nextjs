@@ -1,6 +1,7 @@
 import { useAmp } from "next/amp";
 import Image from "next/image";
 import { useContext, useRef, useState } from "react";
+import Layout from "../components/Layout";
 import { TodosContext } from "../store/contexts/todoContext";
 // amp page configuration
 export const config = { amp: "hybrid" };
@@ -25,7 +26,7 @@ const About = ({ users }: { users: any }) => {
   console.log(todos);
 
   return (
-    <div>
+    <Layout isHeaderVisible>
       <h2>AMP About Page</h2>
       {isAmp ? (
         <amp-img
@@ -79,7 +80,7 @@ const About = ({ users }: { users: any }) => {
             <span> {user.website} </span>
           </div>
         ))}
-    </div>
+    </Layout>
   );
 };
 
