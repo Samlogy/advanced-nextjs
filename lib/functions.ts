@@ -20,3 +20,13 @@ export const throttle = (func: any, limit = 1000) => {
     }
   };
 };
+
+export const getAllCookies = () => {
+  document.cookie
+    .split(";")
+    .reduce(
+      (ac, str) =>
+        Object.assign(ac, { [str.split("=")[0].trim()]: str.split("=")[1] }),
+      {}
+    );
+};
