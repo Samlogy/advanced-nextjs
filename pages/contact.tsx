@@ -1,42 +1,92 @@
-import React, { useState } from "react";
-import { Box, Button, Flex, Heading, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Heading,
+  Input,
+  Radio,
+  RadioGroup,
+  Stack,
+} from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { AiFillCloseCircle } from "react-icons/ai";
+
+const multiStepFormSchema = yup.object().shape({
+  //step1
+  fullName: yup.string().required("fullName"),
+  email: yup
+    .string()
+    .email("Enter a valid Email Address")
+    .required("Email Address required"),
+  //step2
+  address: yup.string().required("address"),
+  isShippingAddress: yup.boolean().required("shipping address"),
+  //step3
+  paymentMethod: yup.string().required("payment method"),
+});
+
+const isEmpty = (data: any) => {
+  if (Object.entries(data).length === 0) return true;
+  else false;
+};
 
 const NBR_STEPS = 3;
 
-function Contact() {
+interface IStepForm {
+  errors: any;
+  register: any;
+}
+export default function Contact() {
   const [step, setStep] = useState<number>(1);
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(multiStepFormSchema),
+  });
 
   const stepTitles: any = {
     1: {
       title: "billing address",
-      icon: "",
+      icon: <AiFillCloseCircle size={28} />,
     },
-    2: { title: "shipping method", icon: "" },
+    2: { title: "shipping method", icon: <AiFillCloseCircle size={28} /> },
     3: {
       title: "payment",
-      icon: "",
+      icon: <AiFillCloseCircle size={28} />,
     },
   };
 
   const stepForm: any = {
-    1: <Step1 />,
-    2: <Step2 />,
-    3: <Step3 />,
+    1: <Step1 register={register} errors={errors} />,
+    2: <Step2 register={register} errors={errors} />,
+    3: <Step3 register={register} errors={errors} />,
   };
 
-  const onSubmit = (e: any) => {
-    e.preventDefault();
+  console.log(errors);
+  console.log(getValues());
+
+  const onSubmit = (data: any) => {
+    //e.preventDefault();
     if (!cantNext) return;
     console.log("form submitted !");
+    console.log(data);
   };
-  const onNextStep = () => {
+  const onNextStep = async () => {
     if (step < NBR_STEPS) {
+      //const result = await trigger("fullName");
+      //console.log(result);
       setStep((prev) => prev + 1);
       return;
-    } else if (cantNext) {
-      // onSubmit();
-      return;
-    }
+    } else if (cantNext) return;
   };
   const onPreviousStep = () => {
     if (step === 1) {
@@ -45,16 +95,9 @@ function Contact() {
       setStep((prev) => prev - 1);
     }
   };
-  const onHandleChange = (e: any) => {
-    const target = e.target;
-    let value = target.type == "checkbox" ? target.checked : target.value;
-    console.log(value);
-  };
 
   const cantPrevious = step === 1;
   const cantNext = step === NBR_STEPS;
-
-  // get data use refs --> react hook form
   // data validation --> yup
 
   return (
@@ -62,7 +105,7 @@ function Contact() {
       <Heading as="h2" textAlign="center" mb="1em">
         Multi Step Form
       </Heading>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Flex
           flexDir="column"
           justify="center"
@@ -78,11 +121,10 @@ function Contact() {
             <Button onClick={onPreviousStep} disabled={cantPrevious}>
               Prev
             </Button>
-            <Box as="span" textTransform="capitalize">
-              {step}
+            <Flex justify="center" align="center" textTransform="capitalize">
               {stepTitles[step].icon}
               {stepTitles[step].title}
-            </Box>
+            </Flex>
             <Button onClick={onNextStep} disabled={cantNext}>
               Next
             </Button>
@@ -94,7 +136,7 @@ function Contact() {
             <Button
               type="submit"
               ml="auto"
-              disabled={cantNext}
+              disabled={!cantNext}
               onClick={() => onSubmit}
             >
               Submit
@@ -106,30 +148,72 @@ function Contact() {
   );
 }
 
-export default Contact;
-
-const Step1 = () => {
+const Step1 = ({ errors, register }: IStepForm) => {
   return (
-    <>
-      <Input name="fullName" placeholder="fullName" mb="1em" />
-      <Input name="email" placeholder="email" mb="1em" />
-    </>
+    <Flex flexDir="column" align="flex-start">
+      <Input
+        name={"fullName"}
+        placeholder="Full Name"
+        isInvalid={errors["fullName"] && register ? true : false}
+        {...register("fullName")}
+      />
+      <Box as="span" color="red.500" mb="1em">
+        {errors?.fullName?.message}
+      </Box>
+      <Input
+        mb="1em"
+        name={"email"}
+        placeholder="Email"
+        isInvalid={errors["email"] && register ? true : false}
+        {...register("email")}
+      />
+    </Flex>
   );
 };
 
-const Step2 = () => {
+const Step2 = ({ errors, register }: IStepForm) => {
   return (
-    <>
-      <Input name="address" placeholder="address" mb="1em" />
-      <Input name="shipping" placeholder="shipping" mb="1em" />
-    </>
+    <Flex flexDir="column" align="flex-start">
+      <Input
+        mb="1em"
+        placeholder="Address"
+        name={"address"}
+        isInvalid={errors["address"] && register ? true : false}
+        {...register("address")}
+      />
+      <Checkbox
+        colorScheme="green"
+        name={"isShippingAddress"}
+        isInvalid={errors["isShippingAddress"] && register ? true : false}
+        {...register("isShippingAddress")}
+      >
+        set it same as shipping address
+      </Checkbox>
+    </Flex>
   );
 };
 
-const Step3 = () => {
+const Step3 = ({ errors, register }: IStepForm) => {
   return (
-    <>
-      <Input name="username" placeholder="fullName" mb="1em" />
-    </>
+    <Flex flexDir="column" align="flex-start">
+      <RadioGroup colorScheme="green" name={"paymentMethod"}>
+        <Stack spacing={5} direction="row">
+          <Radio
+            value="paypal"
+            isInvalid={errors["paymentMethod"] && register ? true : false}
+            {...register("paymentMethod")}
+          >
+            paypal
+          </Radio>
+          <Radio
+            value="paysera"
+            isInvalid={errors["paymentMethod"] && register ? true : false}
+            {...register("paymentMethod")}
+          >
+            paysera
+          </Radio>
+        </Stack>
+      </RadioGroup>
+    </Flex>
   );
 };
