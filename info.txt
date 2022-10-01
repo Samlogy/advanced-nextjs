@@ -68,4 +68,28 @@ Perfomence: (Increase)
         responsive images according device size
         lazy load images
         scale down images to resonable size (according to website size)
-    
+
+Scale web app:
+    *single server setup: (every web app/cache/DB is running on a single server)
+        we can handle user's request a certain limiting point due to limiting ressources
+        if server goes down the whole app is going down
+
+    *Vertical Scaling vs Horizontal Scaling: 
+        *vertical: (scale-up) -> we add more CPU /RAM for our servers
+            pros: great for low traffic
+            cons: doesn't support any failover- can't add unlimited CPU/RAM + costly
+        *Horizontal: (scale-out) -> we add more servers to the pool
+            pros: better for handling large amount of user's request
+            
+            NB: we add load balancer: it job is handle the traffic using different algorithms (Round Robin, ...), easy to scale (add more server into the pool)
+
+            Database Replication: is used to scale database application using master-slave system. Here, master is our main database for that server and slaves are copies of the main database. 
+            we use Master (create/update/delete operations), and the slaves for read (which much higher than any other operation)
+
+            NB: 
+                *otherwise when it reaches its load limit or fails for any reason our system can go down entirely
+                *greater performences
+                *reliability: if any accident occures our data is occied into multiple locations 
+                             if master goes down: a slave take it place temporary runs recovery script (update-to-date)
+                             if slave goes down: all read operations will be transffered to another DB
+
