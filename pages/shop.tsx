@@ -27,7 +27,9 @@ export default function Shop() {
   return (
     <Layout isHeaderVisible>
       <Flex
-        h={{ base: "auto", md: "100vh" }}
+        h={{ base: "auto", md: "80%" }}
+        w="80%"
+        mx="auto"
         py={[0, 10, 20]}
         direction={{ base: "column-reverse", md: "row" }}
       >

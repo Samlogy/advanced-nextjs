@@ -1,10 +1,12 @@
+import { Box, Flex } from "@chakra-ui/react";
+import { motion, useAnimation } from "framer-motion";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Script from "next/script";
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useInView } from "react-intersection-observer";
 
-import LanguageSwitcher from "../components/LanguageSwitcher";
 import Layout from "../components/Layout";
 
 const Home: NextPage = () => {
@@ -71,6 +73,25 @@ const Home: NextPage = () => {
     console.log("sum memo: ", sumMemo);
     console.log("sum callback: ", sumCallback());
   });
+
+  // scroll in view --> animation
+  const { ref, inView } = useInView();
+  const control = useAnimation();
+
+  const boxVariant = {
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, scale: 0 },
+  };
+
+  useEffect(() => {
+    if (inView) {
+      control.start("visible");
+      console.log("inView = ", inView);
+    } else {
+      control.start("hidden");
+    }
+  }, [inView, control]);
+
   return (
     <>
       <Head>
@@ -83,14 +104,12 @@ const Home: NextPage = () => {
 
       <Layout isHeaderVisible>
         <h2>Home</h2>
-        <LanguageSwitcher />
-
         <Image
           loader={myLoader}
           src="https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg"
           alt="Picture of the author"
-          width={500}
-          height={500}
+          width={150}
+          height={150}
           loading="lazy"
         />
 
@@ -102,9 +121,25 @@ const Home: NextPage = () => {
           onReady={() => onReady()}
           onError={() => onError()}
         />
-      </Layout>
 
-      <h2>Switch case replacement</h2>
+        <motion.div
+          ref={ref}
+          animate={control}
+          initial={{ x: "-100vw" }}
+          //animate={{ x: 0 }}
+          variants={boxVariant}
+          transition={{ type: "spring", duration: 1, bounce: 0.3 }}
+        >
+          <Flex flexDir="column" justify="center" align="center">
+            <Box h="20em" w="20em" borderRadius="1em" bg="#555" my="1em"></Box>
+            <Box h="20em" w="20em" borderRadius="1em" bg="#555" my="1em"></Box>
+            <Box h="20em" w="20em" borderRadius="1em" bg="#555" my="1em"></Box>
+            <Box h="20em" w="20em" borderRadius="1em" bg="#555" my="1em"></Box>
+            <Box h="20em" w="20em" borderRadius="1em" bg="#555" my="1em"></Box>
+            <Box h="20em" w="20em" borderRadius="1em" bg="#555" my="1em"></Box>
+          </Flex>
+        </motion.div>
+      </Layout>
     </>
   );
 };
