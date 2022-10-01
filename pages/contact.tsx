@@ -26,14 +26,14 @@ function Contact() {
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    if (step !== NBR_STEPS) return;
+    if (!cantNext) return;
     console.log("form submitted !");
   };
   const onNextStep = () => {
     if (step < NBR_STEPS) {
       setStep((prev) => prev + 1);
       return;
-    } else if (step === NBR_STEPS) {
+    } else if (cantNext) {
       // onSubmit();
       return;
     }
