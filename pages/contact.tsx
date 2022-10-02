@@ -10,24 +10,27 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { AiFillCloseCircle } from "react-icons/ai";
 
-const multiStepFormSchema = yup.object().shape({
-  //step1
-  fullName: yup.string().required("fullName"),
-  email: yup
-    .string()
-    .email("Enter a valid Email Address")
-    .required("Email Address required"),
-  //step2
-  address: yup.string().required("address"),
-  isShippingAddress: yup.boolean().required("shipping address"),
-  //step3
-  paymentMethod: yup.string().required("payment method"),
-});
+const multiStepFormSchema = {
+  step1: yup.object().shape({
+    fullName: yup.string().required("fullName"),
+    email: yup
+      .string()
+      .email("Enter a valid Email Address")
+      .required("Email Address required"),
+  }),
+  step2: yup.object().shape({
+    address: yup.string().required("address"),
+    isShippingAddress: yup.boolean().required("shipping address"),
+  }),
+  step3: yup.object().shape({
+    paymentMethod: yup.string().required("payment method"),
+  }),
+};
 
 const isEmpty = (data: any) => {
   if (Object.entries(data).length === 0) return true;
@@ -42,16 +45,17 @@ interface IStepForm {
 }
 export default function Contact() {
   const [step, setStep] = useState<number>(1);
+  const [triggers, setTriggers] = useState({
+    step1: null,
+    step2: null,
+    step3: null,
+  });
 
   const {
     register,
     handleSubmit,
-    getValues,
-    trigger,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(multiStepFormSchema),
-  });
+  } = useForm();
 
   const stepTitles: any = {
     1: {
@@ -66,13 +70,10 @@ export default function Contact() {
   };
 
   const stepForm: any = {
-    1: <Step1 register={register} errors={errors} />,
-    2: <Step2 register={register} errors={errors} />,
-    3: <Step3 register={register} errors={errors} />,
+    1: <Step1 setTriggers={setTriggers} />,
+    2: <Step2 setTriggers={setTriggers} />,
+    3: <Step3 setTriggers={setTriggers} />,
   };
-
-  console.log(errors);
-  console.log(getValues());
 
   const onSubmit = (data: any) => {
     //e.preventDefault();
@@ -84,6 +85,10 @@ export default function Contact() {
     if (step < NBR_STEPS) {
       //const result = await trigger("fullName");
       //console.log(result);
+
+      if (step === 1) {
+      }
+
       setStep((prev) => prev + 1);
       return;
     } else if (cantNext) return;
@@ -148,43 +153,57 @@ export default function Contact() {
   );
 }
 
-const Step1 = ({ errors, register }: IStepForm) => {
+const Step1 = ({ setTriggers }: { setTriggers: any }) => {
+  const {
+    register,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(multiStepFormSchema.step1),
+  });
+
+  console.log("errors: ", errors);
+
   return (
     <Flex flexDir="column" align="flex-start">
       <Input
-        name={"fullName"}
+        //  name={"fullName"}
         placeholder="Full Name"
-        isInvalid={errors["fullName"] && register ? true : false}
+        isInvalid={errors["fullName"] ? true : false}
         {...register("fullName")}
       />
-      <Box as="span" color="red.500" mb="1em">
-        {errors?.fullName?.message}
-      </Box>
+
       <Input
         mb="1em"
-        name={"email"}
+        //  name={"email"}
         placeholder="Email"
-        isInvalid={errors["email"] && register ? true : false}
+        isInvalid={errors["email"] ? true : false}
         {...register("email")}
       />
     </Flex>
   );
 };
 
-const Step2 = ({ errors, register }: IStepForm) => {
+const Step2 = ({ setTriggers }: { setTriggers: any }) => {
+  const {
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(multiStepFormSchema.step2),
+  });
   return (
     <Flex flexDir="column" align="flex-start">
       <Input
         mb="1em"
         placeholder="Address"
-        name={"address"}
-        isInvalid={errors["address"] && register ? true : false}
+        // name={"address"}
+        isInvalid={errors["address"] ? true : false}
         {...register("address")}
       />
       <Checkbox
         colorScheme="green"
-        name={"isShippingAddress"}
-        isInvalid={errors["isShippingAddress"] && register ? true : false}
+        //  name={"isShippingAddress"}
+        isInvalid={errors["isShippingAddress"] ? true : false}
         {...register("isShippingAddress")}
       >
         set it same as shipping address
@@ -193,21 +212,27 @@ const Step2 = ({ errors, register }: IStepForm) => {
   );
 };
 
-const Step3 = ({ errors, register }: IStepForm) => {
+const Step3 = ({ setTriggers }: { setTriggers: any }) => {
+  const {
+    register,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(multiStepFormSchema.step2),
+  });
   return (
     <Flex flexDir="column" align="flex-start">
       <RadioGroup colorScheme="green" name={"paymentMethod"}>
         <Stack spacing={5} direction="row">
           <Radio
             value="paypal"
-            isInvalid={errors["paymentMethod"] && register ? true : false}
+            isInvalid={errors["paymentMethod"] ? true : false}
             {...register("paymentMethod")}
           >
             paypal
           </Radio>
           <Radio
             value="paysera"
-            isInvalid={errors["paymentMethod"] && register ? true : false}
+            isInvalid={errors["paymentMethod"] ? true : false}
             {...register("paymentMethod")}
           >
             paysera
