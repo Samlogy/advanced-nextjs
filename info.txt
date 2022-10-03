@@ -93,3 +93,34 @@ Scale web app:
                              if master goes down: a slave take it place temporary runs recovery script (update-to-date)
                              if slave goes down: all read operations will be transffered to another DB
 
+Tips:
+    call for experience / help of more experienced ones in the field
+    test code
+    use documentation
+    automate things when u can (increase productivity)
+    learn about algorithms / data structures / computer science basics
+    collaborate with people
+    keep learnings
+
+
+REST API:
+    use patch over put (
+        patch: partial update
+        put: full update
+    )
+    endpoint naming
+    standardization of response / error object
+    add error / success message
+    add HTTP status code
+    each endpoint takes care of one single action & do it well (create services single action, do it well, and can be reusable)
+    provide API documentation (
+        endpoints available, and their purpose
+        permission required to execute an endpoint
+        example of endpoint invocation (response)
+        error message to expect
+    )
+    use SSL / configure CORS
+    version the API
+    use cache --> performence
+    Use standard UTC dates --> new Date().date.toISOString()
+    add health check endpoint --> GET /health
