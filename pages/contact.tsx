@@ -3,82 +3,91 @@ import {
   Button,
   Checkbox,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
   Radio,
   RadioGroup,
   Stack,
-} from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { AiFillCloseCircle } from "react-icons/ai";
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import * as yup from 'yup';
 
-const multiStepFormSchema = {
-  step1: yup.object().shape({
-    fullName: yup.string().required("fullName"),
+const multiStepFormSchema: any = {
+  1: yup.object().shape({
+    fullName: yup.string().required('fullName'),
     email: yup
       .string()
-      .email("Enter a valid Email Address")
-      .required("Email Address required"),
+      .email('Enter a valid Email Address')
+      .required('Email Address required'),
   }),
-  step2: yup.object().shape({
-    address: yup.string().required("address"),
-    isShippingAddress: yup.boolean().required("shipping address"),
+  2: yup.object().shape({
+    address: yup.string().required('address'),
+    isShippingAddress: yup.boolean().required('shipping address'),
   }),
-  step3: yup.object().shape({
-    paymentMethod: yup.string().required("payment method"),
+  3: yup.object().shape({
+    paymentMethod: yup.string().required('payment method'),
   }),
-};
-
-const isEmpty = (data: any) => {
-  if (Object.entries(data).length === 0) return true;
-  else false;
 };
 
 const NBR_STEPS = 3;
-
 interface IStepForm {
   errors: any;
   register: any;
 }
+interface IInputField {
+  errors?: any;
+  register?: any;
+  name: string;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+  iconLeft?: any;
+  iconRight?: any;
+  [restProps: string]: any;
+}
 export default function Contact() {
   const [step, setStep] = useState<number>(1);
-  const [triggers, setTriggers] = useState({
-    step1: null,
-    step2: null,
-    step3: null,
-  });
 
   const {
     register,
+    watch,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
-
+    formState: { errors, isValid },
+  } = useForm({
+    resolver: yupResolver(multiStepFormSchema[step]),
+    mode: 'all',
+  });
   const stepTitles: any = {
     1: {
-      title: "billing address",
+      title: 'billing address',
       icon: <AiFillCloseCircle size={28} />,
     },
-    2: { title: "shipping method", icon: <AiFillCloseCircle size={28} /> },
+    2: { title: 'shipping method', icon: <AiFillCloseCircle size={28} /> },
     3: {
-      title: "payment",
+      title: 'payment',
       icon: <AiFillCloseCircle size={28} />,
     },
   };
 
   const stepForm: any = {
-    1: <Step1 setTriggers={setTriggers} />,
-    2: <Step2 setTriggers={setTriggers} />,
-    3: <Step3 setTriggers={setTriggers} />,
+    1: <Step1 errors={errors} register={register} />,
+    2: <Step2 errors={errors} register={register} />,
+    3: <Step3 errors={errors} register={register} />,
   };
 
   const onSubmit = (data: any) => {
     //e.preventDefault();
     if (!cantNext) return;
-    console.log("form submitted !");
+    console.log('form submitted !');
     console.log(data);
   };
   const onNextStep = async () => {
@@ -102,7 +111,9 @@ export default function Contact() {
   };
 
   const cantPrevious = step === 1;
-  const cantNext = step === NBR_STEPS;
+  const cantNext = step === NBR_STEPS || !isValid;
+
+  console.log(isValid);
   // data validation --> yup
 
   return (
@@ -126,8 +137,13 @@ export default function Contact() {
             <Button onClick={onPreviousStep} disabled={cantPrevious}>
               Prev
             </Button>
-            <Flex justify="center" align="center" textTransform="capitalize">
-              {stepTitles[step].icon}
+            <Flex
+              flexDir="column"
+              justify="center"
+              align="center"
+              textTransform="capitalize"
+            >
+              {`${step} / ${NBR_STEPS}`}
               {stepTitles[step].title}
             </Flex>
             <Button onClick={onNextStep} disabled={cantNext}>
@@ -137,7 +153,7 @@ export default function Contact() {
 
           {stepForm[step]}
 
-          {cantNext && (
+          {cantNext && isValid && (
             <Button
               type="submit"
               ml="auto"
@@ -149,62 +165,45 @@ export default function Contact() {
           )}
         </Flex>
       </form>
+      <code> {JSON.stringify(watch(), null, 2)} </code>
     </div>
   );
 }
 
-const Step1 = ({ setTriggers }: { setTriggers: any }) => {
-  const {
-    register,
-    trigger,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(multiStepFormSchema.step1),
-  });
-
-  console.log("errors: ", errors);
-
+const Step1 = ({ errors, register }: IStepForm) => {
   return (
     <Flex flexDir="column" align="flex-start">
-      <Input
-        //  name={"fullName"}
-        placeholder="Full Name"
-        isInvalid={errors["fullName"] ? true : false}
-        {...register("fullName")}
+      <InputField
+        name="fullName"
+        label="Full Name"
+        register={register}
+        errors={errors}
       />
 
-      <Input
-        mb="1em"
-        //  name={"email"}
-        placeholder="Email"
-        isInvalid={errors["email"] ? true : false}
-        {...register("email")}
+      <InputField
+        name="email"
+        label="Email"
+        register={register}
+        errors={errors}
       />
     </Flex>
   );
 };
 
-const Step2 = ({ setTriggers }: { setTriggers: any }) => {
-  const {
-    register,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(multiStepFormSchema.step2),
-  });
+const Step2 = ({ errors, register }: IStepForm) => {
   return (
     <Flex flexDir="column" align="flex-start">
-      <Input
-        mb="1em"
-        placeholder="Address"
-        // name={"address"}
-        isInvalid={errors["address"] ? true : false}
-        {...register("address")}
+      <InputField
+        name="address"
+        label="Address"
+        register={register}
+        errors={errors}
       />
       <Checkbox
         colorScheme="green"
         //  name={"isShippingAddress"}
-        isInvalid={errors["isShippingAddress"] ? true : false}
-        {...register("isShippingAddress")}
+        isInvalid={errors['isShippingAddress'] ? true : false}
+        {...register('isShippingAddress')}
       >
         set it same as shipping address
       </Checkbox>
@@ -212,28 +211,22 @@ const Step2 = ({ setTriggers }: { setTriggers: any }) => {
   );
 };
 
-const Step3 = ({ setTriggers }: { setTriggers: any }) => {
-  const {
-    register,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(multiStepFormSchema.step2),
-  });
+const Step3 = ({ errors, register }: IStepForm) => {
   return (
     <Flex flexDir="column" align="flex-start">
-      <RadioGroup colorScheme="green" name={"paymentMethod"}>
+      <RadioGroup colorScheme="green" name={'paymentMethod'}>
         <Stack spacing={5} direction="row">
           <Radio
             value="paypal"
-            isInvalid={errors["paymentMethod"] ? true : false}
-            {...register("paymentMethod")}
+            isInvalid={errors['paymentMethod'] ? true : false}
+            {...register('paymentMethod')}
           >
             paypal
           </Radio>
           <Radio
             value="paysera"
-            isInvalid={errors["paymentMethod"] ? true : false}
-            {...register("paymentMethod")}
+            isInvalid={errors['paymentMethod'] ? true : false}
+            {...register('paymentMethod')}
           >
             paysera
           </Radio>
@@ -242,3 +235,57 @@ const Step3 = ({ setTriggers }: { setTriggers: any }) => {
     </Flex>
   );
 };
+
+function InputField({
+  errors,
+  register,
+  name,
+  label,
+  placeholder,
+  type = 'text',
+  iconLeft,
+  iconRight,
+  ...restProps
+}: IInputField) {
+  const width = restProps.w ? restProps.w : '20rem';
+  const inputColor = useColorModeValue('gray_9', 'gray_3');
+  return (
+    <FormControl id={name} mb=".5rem" w={width}>
+      {label && <FormLabel fontWeight="600"> {label} </FormLabel>}
+      <InputGroup>
+        {iconLeft && <InputLeftElement> {iconLeft} </InputLeftElement>}
+        {register ? (
+          <Input
+            type={type}
+            placeholder={placeholder}
+            _placeholder={{ color: 'gray_4' }}
+            isInvalid={errors[name] && register ? true : false}
+            focusBorderColor={errors[name] && register ? 'error' : 'accent_5'}
+            borderRadius="5px"
+            bg={inputColor}
+            {...register(name)}
+            {...restProps}
+          />
+        ) : (
+          <Input
+            type={type}
+            name={name}
+            placeholder={placeholder}
+            _placeholder={{ color: 'gray_4' }}
+            focusBorderColor="accent_5"
+            borderRadius="5px"
+            bg={inputColor}
+            {...restProps}
+          />
+        )}
+        {iconRight && <InputRightElement> {iconRight} </InputRightElement>}
+      </InputGroup>
+
+      {register && (
+        <Box as="span" color="red.500" fontSize="12px">
+          {errors[name]?.message}
+        </Box>
+      )}
+    </FormControl>
+  );
+}
