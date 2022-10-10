@@ -58,3 +58,31 @@
   background-color: black;
   opacity: 1;
 }
+
+/* Modal */
+.modal-container {
+  background-color: lightgray;
+  padding: 1em;
+  width: 30em;
+  height: 20em;
+  border-radius: 10px;
+
+  margin: auto;
+}
+
+.modal--content {
+  position: relative;
+}
+
+.modal--header,
+.modal--body,
+.modal--footer {
+  padding: 1em;
+}
+
+.modal--close {
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  cursor: pointer;
+}

@@ -1,6 +1,7 @@
 import { Heading } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import ReactDOM from 'react-dom';
 import {
   MdOutlineArrowBackIosNew,
   MdOutlineArrowForwardIos,
@@ -11,14 +12,44 @@ import skate from '../public/images/skateboard.jpg';
 
 export default function Challenges() {
   const images = [skate, screen];
+  const [isOpen, setOpen] = useState(false);
   return (
     <div>
       <Heading as="h2" textAlign="center" mb="1em">
         Modal
       </Heading>
-      <Carousel data={images} isAutoPlay speed={1500} />
+      {/*
+        <Carousel data={images} isAutoPlay speed={1000} />
+      */}
+      <button onClick={() => setOpen(true)}> open </button>
+      <Modal isOpen={isOpen} onClose={() => setOpen(false)} />
     </div>
   );
+}
+
+interface IModal {
+  isOpen: boolean;
+  onClose: any;
+  header?: any;
+  body?: any;
+  footer?: any;
+}
+function Modal({ isOpen, onClose, header, body, footer }: IModal) {
+  if (isOpen)
+    return ReactDOM.createPortal(
+      <div className="modal-container">
+        <div className="modal--content">
+          <span className="modal--close" onClick={onClose}>
+            <MdOutlineArrowForwardIos color="black" size={20} />
+          </span>
+          {header && <div className="modal--header">{header}</div>}
+          {body && <div className="modal--body"> {body} </div>}
+          {footer && <div className="modal--footer"> {footer} </div>}
+        </div>
+      </div>,
+      document.body
+    );
+  return null;
 }
 
 interface ICarousel {
@@ -47,20 +78,14 @@ function Carousel({ data, isAutoPlay = false, speed = 500 }: ICarousel) {
     setSlide((prev) => prev + 1);
   }
   function goTo(index: number) {
-    console.log(index + 1);
     setSlide(index + 1);
   }
 
   function onAutoPlay() {
     setInterval(onNext, speed);
   }
-  // auto play (autoPlay, speed)
-  useEffect(() => {
-    isAutoPlay && onAutoPlay();
-    return () => {
-      onAutoPlay();
-    };
-  }, []);
+
+  //isAutoPlay && onAutoPlay();
 
   return (
     <div className="slider-container">
