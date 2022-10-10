@@ -6,6 +6,7 @@
   box-sizing: border-box;
 }
 
+/* ========= Carousel ========= */
 .slider-container {
   position: relative;
   width: 30em;
@@ -59,7 +60,7 @@
   opacity: 1;
 }
 
-/* Modal */
+/* ========= Modal ========= */
 .modal-container {
   background-color: lightgray;
   padding: 1em;
