@@ -62,14 +62,15 @@
 
 /* ========= Modal ========= */
 .modal--overlay {
-  background-color: rgba(0, 0, 0, 0.63);
-  width: 100vw;
-  height: 184vh;
   z-index: 100;
   top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: fixed;
+  background-color: #000;
+  opacity: 0.75;
+  width: 100vw;
+  height: 184vh;
 }
 .modal-container {
   background-color: lightgray;
@@ -103,4 +104,41 @@
   right: 0;
   top: 0;
   border-radius: 10px;
+}
+
+/* ========= Alert ========= */
+.alert--container {
+  min-height: 5vh;
+  width: 100vw;
+  color: #fff;
+  padding: 0.5em;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+.alert--message {
+  width: 90%;
+  text-align: left;
+  margin-left: 1em;
+}
+.alert--close {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #fff;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.alert--container.success {
+  background-color: #38a169;
+}
+.alert--container.error {
+  background-color: #e53e3e;
+}
+.alert--container.info {
+  background-color: #3182ce;
+}
+.alert--container.warning {
+  background-color: #dd6b20;
 }
