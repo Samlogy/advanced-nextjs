@@ -1,6 +1,6 @@
 import { Heading } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import {
   MdOutlineArrowBackIosNew,
@@ -36,30 +36,10 @@ interface IModal {
   footer?: any;
 }
 function Modal({ isOpen, onClose, header, body, footer }: IModal) {
-  const ref = useRef<any>(null);
-
-  function closeOutside(e: any) {
-    if (isOpen && ref.current && !ref.current.contains(e.target)) {
-      onClose();
-    }
-  }
-  useEffect(() => {
-    document.addEventListener('mousedown', closeOutside);
-    return () => {
-      document.removeEventListener('mousedown', closeOutside);
-    };
-  }, [isOpen]);
-
   if (isOpen)
     return ReactDOM.createPortal(
-      <div
-        className="modal--overlay"
-        onClick={(e) => {
-          e.stopPropagation();
-          close();
-        }}
-      >
-        <div className="modal-container" ref={ref} onClick={closeOutside}>
+      <div className="modal--overlay" onClick={onClose}>
+        <div className="modal-container" onClick={(e) => e.stopPropagation()}>
           <span className="modal--close" onClick={onClose}>
             <MdOutlineClose color="black" size={24} />
           </span>
