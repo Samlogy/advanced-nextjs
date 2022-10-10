@@ -61,14 +61,30 @@
 }
 
 /* ========= Modal ========= */
+.modal--overlay {
+  background-color: rgba(0, 0, 0, 0.63);
+  width: 100vw;
+  height: 184vh;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
 .modal-container {
   background-color: lightgray;
   padding: 1em;
   width: 30em;
   height: 20em;
   border-radius: 10px;
-
   margin: auto;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 10%);
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
+  z-index: 10;
 }
 
 .modal--content {
@@ -82,8 +98,20 @@
 }
 
 .modal--close {
-  position: absolute;
-  top: -3px;
-  right: -5px;
   cursor: pointer;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.2em;
+  background-color: #f0f0f0;
+  color: #2c3e50;
+  transition: all 0.25s ease;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.06);
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-self: flex-end;
+  margin-top: -7px;
+  margin-right: -7px;
 }

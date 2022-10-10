@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import {
   MdOutlineArrowBackIosNew,
   MdOutlineArrowForwardIos,
+  MdOutlineClose,
 } from 'react-icons/md';
 
 import screen from '../public/images/screen.png';
@@ -37,14 +38,16 @@ interface IModal {
 function Modal({ isOpen, onClose, header, body, footer }: IModal) {
   if (isOpen)
     return ReactDOM.createPortal(
-      <div className="modal-container">
-        <div className="modal--content">
-          <span className="modal--close" onClick={onClose}>
-            <MdOutlineArrowForwardIos color="black" size={20} />
-          </span>
-          {header && <div className="modal--header">{header}</div>}
-          {body && <div className="modal--body"> {body} </div>}
-          {footer && <div className="modal--footer"> {footer} </div>}
+      <div className="modal--overlay">
+        <div className="modal-container">
+          <div className="modal--content">
+            <span className="modal--close" onClick={onClose}>
+              <MdOutlineClose color="black" size={20} />
+            </span>
+            {header && <div className="modal--header">{header}</div>}
+            {body && <div className="modal--body"> {body} </div>}
+            {footer && <div className="modal--footer"> {footer} </div>}
+          </div>
         </div>
       </div>,
       document.body
