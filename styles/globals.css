@@ -142,3 +142,51 @@
 .alert--container.warning {
   background-color: #dd6b20;
 }
+
+/* ========= Side Bar ========= */
+.sidebar--container {
+  position: relative;
+}
+.sidebar--content {
+  display: flex;
+  padding: 1em;
+  border-radius: 10px;
+  flex-direction: column;
+  width: 12em;
+  justify-content: flex-start;
+  height: 100vh;
+  background-color: rgb(238, 238, 238);
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-style: italic;
+  width: 100%;
+  margin-bottom: 0.75em;
+  color: #38a169;
+}
+.sidebar--item {
+  margin: 0.1em 0;
+  padding: 0.5em;
+  width: 100%;
+  cursor: pointer;
+  color: #38a169;
+  transition: all 0.05s ease-in;
+}
+
+.sidebar--item:hover {
+  background-color: #38a169;
+  color: #fff;
+  border-radius: 10px;
+}
+button.btn-icon {
+  background-color: lightgray;
+  padding: 0.5em;
+  border-radius: 10px;
+}
+
+.sidebar--toggle {
+  position: absolute;
+  left: 14%;
+  top: 2%;
+}
