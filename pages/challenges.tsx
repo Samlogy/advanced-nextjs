@@ -1,7 +1,12 @@
 import { Heading } from '@chakra-ui/react';
-import { useState } from 'react';
-import { MdOutlineClose } from 'react-icons/md';
-
+import { useEffect, useState } from 'react';
+import {
+  MdCheckCircle,
+  MdError,
+  MdInfo,
+  MdOutlineClose,
+  MdWarning,
+} from 'react-icons/md';
 import screen from '../public/images/screen.png';
 import skate from '../public/images/skateboard.jpg';
 
@@ -22,26 +27,47 @@ export default function Challenges() {
       <button onClick={() => setOpen(true)}> open </button>
       <Modal isOpen={isOpen} onClose={() => setOpen(false)} />
 
-      <Alert status="success" message={msg} isClose />
+      <Alert status="success" message={msg} isClose timeClose={3000} />
     </div>
   );
 }
 
-function Alert({ status, message, isClose }: any) {
-  const [isOpen, setOpen] = useState(false);
-  return (
-    <div className={`alert--container ${status}`}>
-      <div>
-        <MdOutlineClose size={22} onClick={() => setOpen(false)} />
-      </div>
-      <p className="alert--message"> {message} </p>
+interface IAlert {
+  status: string;
+  message: string;
+  isClose?: boolean;
+  timeClose?: number;
+}
 
-      {isClose && (
-        <MdOutlineClose
-          className="alert--close"
-          onClick={() => setOpen(false)}
-        />
-      )}
-    </div>
-  );
+function Alert({ status, message, isClose = true, timeClose = 1000 }: IAlert) {
+  const [isOpen, setOpen] = useState(true);
+
+  const statusIcons: any = {
+    success: <MdCheckCircle size={24} onClick={() => setOpen(false)} />,
+    error: <MdError size={24} onClick={() => setOpen(false)} />,
+    warning: <MdWarning size={24} onClick={() => setOpen(false)} />,
+    info: <MdInfo size={24} onClick={() => setOpen(false)} />,
+  };
+
+  useEffect(() => {
+    // close after 3s
+    if (isOpen) setTimeout(() => setOpen(false), timeClose);
+  }, []);
+
+  if (isOpen) {
+    return (
+      <div className={`alert--container ${status}`}>
+        <div>{statusIcons[status]}</div>
+        <p className="alert--message"> {message} </p>
+
+        {isClose && (
+          <MdOutlineClose
+            className="alert--close"
+            onClick={() => setOpen(false)}
+          />
+        )}
+      </div>
+    );
+  }
+  return null;
 }
