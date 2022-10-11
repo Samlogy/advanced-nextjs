@@ -1,5 +1,5 @@
-import ReactDOM from 'react-dom';
 import { MdOutlineClose } from 'react-icons/md';
+import Portal from './Portal';
 
 interface IModal {
   isOpen: boolean;
@@ -16,20 +16,21 @@ export default function Modal({
   footer,
 }: IModal) {
   if (isOpen)
-    return ReactDOM.createPortal(
-      <div className="modal--overlay" onClick={onClose}>
-        <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-          <span className="modal--close" onClick={onClose}>
-            <MdOutlineClose color="black" size={24} />
-          </span>
-          <div className="modal--content">
-            {header && <div className="modal--header">{header}</div>}
-            {body && <div className="modal--body">{body}</div>}
-            {footer && <div className="modal--footer"> {footer} </div>}
+    return (
+      <Portal>
+        <div className="modal--overlay" onClick={onClose}>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <span className="modal--close" onClick={onClose}>
+              <MdOutlineClose color="black" size={24} />
+            </span>
+            <div className="modal--content">
+              {header && <div className="modal--header">{header}</div>}
+              {body && <div className="modal--body">{body}</div>}
+              {footer && <div className="modal--footer"> {footer} </div>}
+            </div>
           </div>
         </div>
-      </div>,
-      document.body
+      </Portal>
     );
   return null;
 }
