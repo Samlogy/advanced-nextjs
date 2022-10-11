@@ -198,3 +198,43 @@ button.btn-icon {
   left: 14%;
   top: 2%;
 }
+
+/* ========= Nav Bar ========= */
+.navbar--container {
+  position: relative;
+}
+.navbar--content {
+  display: flex;
+  padding: 1em;
+  border-radius: 10px;
+  flex-direction: row;
+  width: 100vw;
+  justify-content: space-between;
+  align-items: center;
+  height: 8vh;
+  background-color: rgb(238, 238, 238);
+}
+
+.navbar--item {
+  margin: 0 0.5em;
+  cursor: pointer;
+  color: var(--success);
+  font-weight: 600;
+  transition: background 0.05s ease-in;
+  padding: 0.5em;
+}
+
+.navbar--item:hover {
+}
+
+.navbar--links {
+  display: flex;
+  flex-direction: row;
+}
+
+.navbar--logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--success);
+}
