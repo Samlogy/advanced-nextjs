@@ -5,11 +5,18 @@
   margin: 0;
   box-sizing: border-box;
 }
+/* variables */
+:root {
+  --success: #38a169;
+  --error: #e53e3e;
+  --warning: #dd6b20;
+  --info: #3182ce;
+}
 
 /* ========= Carousel ========= */
 .slider-container {
   position: relative;
-  width: 30em;
+  width: 90%;
   margin: 0 auto;
 }
 .slider-image {
@@ -131,16 +138,16 @@
   right: 10px;
 }
 .alert--container.success {
-  background-color: #38a169;
+  background-color: var(--success);
 }
 .alert--container.error {
-  background-color: #e53e3e;
+  background-color: var(--error);
 }
 .alert--container.info {
-  background-color: #3182ce;
+  background-color: var(--info);
 }
 .alert--container.warning {
-  background-color: #dd6b20;
+  background-color: var(--warning);
 }
 
 /* ========= Side Bar ========= */
@@ -163,19 +170,20 @@
   font-style: italic;
   width: 100%;
   margin-bottom: 0.75em;
-  color: #38a169;
+  color: var(--success);
 }
 .sidebar--item {
   margin: 0.1em 0;
   padding: 0.5em;
   width: 100%;
   cursor: pointer;
-  color: #38a169;
-  transition: all 0.05s ease-in;
+  color: var(--success);
+  font-weight: 600;
+  transition: background 0.05s ease-in;
 }
 
 .sidebar--item:hover {
-  background-color: #38a169;
+  background-color: var(--success);
   color: #fff;
   border-radius: 10px;
 }
