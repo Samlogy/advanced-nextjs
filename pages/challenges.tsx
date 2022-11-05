@@ -1,5 +1,11 @@
 import Link from 'next/link';
-import { useCallback, useMemo, useState, useTransition } from 'react';
+import {
+  useCallback,
+  useDeferredValue,
+  useMemo,
+  useState,
+  useTransition,
+} from 'react';
 
 import screen from '../public/images/screen.png';
 import skate from '../public/images/skateboard.jpg';
@@ -31,7 +37,11 @@ export default function Challenges() {
   //  <TransitionHook />
   const msg: string =
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic saepe deleniti eius obcaecati voluptates quidem, nulla iure, esse molestias, consequuntur voluptas atque. Aspernatur temporibus a ipsam velit dolores culpa.';
-  return <div></div>;
+  return (
+    <div>
+      <DeferredValueHook />
+    </div>
+  );
 }
 
 const LINKS = [
@@ -143,7 +153,6 @@ function MemoVsCallback() {
     </div>
   );
 }
-
 // Expensive Function
 const computeExpensiveValue = (count: number) => {
   // Display on console whenever the function gets call
@@ -154,17 +163,18 @@ const computeExpensiveValue = (count: number) => {
   }
   return count;
 };
+function generateProducts() {
+  const products = [];
+  for (let i = 0; i < 10000; i++) {
+    products.push(`Product ${i + 1}`);
+  }
+  return products;
+}
+
 function TransitionHook() {
   const [isPending, startTransition] = useTransition();
   const [filterTerm, setFilterTerm] = useState('');
 
-  function generateProducts() {
-    const products = [];
-    for (let i = 0; i < 10000; i++) {
-      products.push(`Product ${i + 1}`);
-    }
-    return products;
-  }
   const dummyProducts = generateProducts();
 
   function filterProducts(filterTerm: string) {
@@ -197,6 +207,44 @@ function TransitionHook() {
         onChange={updateFilterHandler}
       />
       {isPending && <p style={{ color: 'gray' }}>Updating list..</p>}
+      <ul>
+        {filteredProducts.map((product, idx) => (
+          <li key={idx}>{product}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+function DeferredValueHook() {
+  const [filterTerm, setFilterTerm] = useState('');
+
+  const dummyProducts = generateProducts();
+
+  function filterProducts(filterTerm: string) {
+    if (!filterTerm) {
+      return dummyProducts;
+    }
+    return dummyProducts.filter((product) => product.includes(filterTerm));
+  }
+
+  const filteredProducts = useDeferredValue(filterProducts(filterTerm));
+
+  function updateFilterHandler(event: any) {
+    setFilterTerm(event.target.value);
+    console.log('here');
+  }
+  console.log(filteredProducts);
+
+  // useDefferedValue: allows to fix slow renders problems by implementing a delay similar(throttling, debouncing)
+  return (
+    <div id="app">
+      <Input
+        w="20em"
+        type="text"
+        placeholder="filter term"
+        onChange={updateFilterHandler}
+      />
+
       <ul>
         {filteredProducts.map((product, idx) => (
           <li key={idx}>{product}</li>
