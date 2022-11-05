@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useTransition } from 'react';
 
 import screen from '../public/images/screen.png';
 import skate from '../public/images/skateboard.jpg';
 
+import { Input } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -26,14 +27,11 @@ export default function Challenges() {
   */
   // <SideBar />
   // <NavBar />
-
+  //   <MemoVsCallback />
+  //  <TransitionHook />
   const msg: string =
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus hic saepe deleniti eius obcaecati voluptates quidem, nulla iure, esse molestias, consequuntur voluptas atque. Aspernatur temporibus a ipsam velit dolores culpa.';
-  return (
-    <div>
-      <MemoVsCallback />
-    </div>
-  );
+  return <div></div>;
 }
 
 const LINKS = [
@@ -156,3 +154,54 @@ const computeExpensiveValue = (count: number) => {
   }
   return count;
 };
+function TransitionHook() {
+  const [isPending, startTransition] = useTransition();
+  const [filterTerm, setFilterTerm] = useState('');
+
+  function generateProducts() {
+    const products = [];
+    for (let i = 0; i < 10000; i++) {
+      products.push(`Product ${i + 1}`);
+    }
+    return products;
+  }
+  const dummyProducts = generateProducts();
+
+  function filterProducts(filterTerm: string) {
+    if (!filterTerm) {
+      return dummyProducts;
+    }
+    return dummyProducts.filter((product) => product.includes(filterTerm));
+  }
+
+  const filteredProducts = filterProducts(filterTerm);
+
+  function updateFilterHandler(event: any) {
+    startTransition(() => {
+      setFilterTerm(event.target.value);
+      console.log('here');
+    });
+  }
+  console.log(isPending);
+
+  // useTransition: used specially for slow devices (the code is more responsive, less laggy)
+  // startTransition: wraps a function responsile for this behaviour (ex: filtering in our case)
+  // isPending: boolean value that tells us some state updates that are still pending (hasn't been yet by react) --> so we can show some fallback in the UI.
+
+  return (
+    <div id="app">
+      <Input
+        w="20em"
+        type="text"
+        placeholder="filter term"
+        onChange={updateFilterHandler}
+      />
+      {isPending && <p style={{ color: 'gray' }}>Updating list..</p>}
+      <ul>
+        {filteredProducts.map((product, idx) => (
+          <li key={idx}>{product}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
