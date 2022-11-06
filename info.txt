@@ -124,3 +124,132 @@ REST API:
     use cache --> performence
     Use standard UTC dates --> new Date().date.toISOString()
     add health check endpoint --> GET /health
+    
+Mobile Apps:
+	mobile dev is process that involves creating apps for multiple devices such as: smartphones, tablet, ...
+	the process involves the conception, planning, design, development, and testing of the app.
+	
+	Types:
+	Native apps:
+		developed specifically for one type of mobile operating system: iOS or Android. Native apps are written in the language that’s native to the operating system, such as Objective-C or Swift for iOS apps, and Java or Kotlin for Android apps.
+	pros: 
+		take full advantage of the device ressources of the mobile(camera, ...)
+		better user experience
+	cons: 
+		expensive to develop & required to develop an app for each operating system
+		require more time to develop due to operating system set of rules
+		more difficul to develop due to each operating system updating process
+		
+			
+	Hybrid:
+		developped using web technologies (html, css, js) or native technologies (objective-c,...), for hybrid dev we use framework (react native, ionic, cordova, ...)
+	pros:
+		less time & money, easier to develop
+		take advantages od each plateform features
+		can be downloaded in app / apple stores
+		can be designed to work on multiple types of mobile devices (smartphones, ...)
+	cons:
+		less reliable than native apps
+		more difficult to update because they need to be compatible with multiple types of operating systems.
+		less responsive (less UX) than native apps
+		less performent than native apps
+		
+	Web Apps:
+		A web app is an app that’s developed using web technologies (HTML, CSS, and JavaScript). They are usually developed using a framework (Angular, React, or Vue).
+	pros: 
+		great experience (UX) when it comes to using web app in brower in comparaison with traditional website.
+	cons: 
+		less responsive than hybrid apps
+		
+	
+	Hybrid vs Native vs Web Apps:
+		Native: are great when it comes to performences, UX and reliabilty
+		Hybrid: cheaper, faster, UX and performences are decent enough, available in app stores, develop multiple OS / devices with one single source code.
+		Web: can be updated easily compared to other types, designed on multiple devices, and plateforms.
+	NB:
+		Native: are a better choice for: apps that require performences, established companies business, large funds, ...
+		Hybrid: are better choice for: companies that want to release a mobile app, medium / small funds, performences / reliabilty is not an important criterias.
+		Web: are better choice for: thoes want to provide great quality app and experience (UX) on browser in comparaison to websites, easies to update, adapt, and companies from small, to large scale, can improve a company web presence more than any mobile since it's available in web. 
+		
+		
+		
+		
+REST vs GraphQL vs RCP
+    graph: 
+        pros:
+            Adaptability — the client decides what data they want, how they want it and what format they want to get it in,
+            Efficiency — delivers exactly what the client requests without over fetching,
+            Flexibility — GraphQl is cross-platform and supports more than a dozen languages (Perl, Java, Python, PHP among others).
+
+        cons: 
+            caching problems (spcially HTTP)
+    REST: 
+        pros: 
+            Performance — best suited for systems requiring rapid iteration and HTTP standardized verbiage,
+            Scalability — allows the support of large numbers of components and interactions among them,
+            Simplicity — REST has a uniform interface which simplifies and decouples the architecture,
+            Modifiability — components can be modified to fit changing needs even while the application is running.
+
+        cons: 
+            receive targe payload (more data than necesary needed)
+            sometimes you need multiple round to send data to different endpoint
+
+    gRCP: 
+        pros:
+            lightweight — , requires very little resources which makes it a handy solution for even extremely low powered situations
+            efficient — , gPRC uses protobufs, a method of serializing structured data which focuses on serializing communication in an effective manner
+            open-source —  and can be freely used, modified or forked
+          
+Programming paradigm:
+	are a way to classify programming languages on their features.
+	each paradigm consists of a certain structures, features, and opinions about how common programming problems should be tackled.
+	
+	NB:
+	  Some programming paradigm can be subdivisions of other programming paradigm.
+	
+	Functional Programming:
+		paradigm programs are constructed by applying and composing functions. Here functions are treated as first-class citizens, meaning that they can be assigned to variables, passed as arguments, and returned from other functions, just as any other data type can.
+		pros: 
+			uses immutable data, and as the focus on input/output element.
+			programming statements can be executed in any order
+			less complex
+			elements used: variables, functions
+	
+	Object Oriented Programming:
+		separate concerns into entities which are coded as objects, and classes that building block to create these objects.
+		pros:
+			very structured --> classes, objects, methods
+			programming statements can be executed in a specific order
+		cons:
+			more complex
+			use mutable data --> data structure (can be changed)
+
+    useTransition vs useDefferedValue:
+        useTransition: seTransition: used specially for slow devices (the code is more responsive, less laggy)
+        startTransition: wraps a function responsile for this behaviour (ex: filtering in our case)
+        isPending: boolean value that tells us some state updates that are still pending (hasn't been yet by react) --> so we can show some fallback in the UI.
+
+        useDefferedValue: allows to fix slow renders problems by implementing a delay similar(throttling, debouncing)
+
+        differences:
+            do not use both at the same time since they basiccaly do the same things
+            useTransition: wraps the state updating code
+            useDefferedValue: wraps the value affected by the state change
+            if i have access state updating code + have state updates (have to be treated in lower priority) --> useTransition
+            else (i do not have access to that) --> useDefferedValue
+            do not wrap all the code, use other performance enhancements (pagination, lazy loading, worker threads, back-end, ...)
+    
+    useMemo vs useCallback:
+        they are both used for optimization since it uses memoizing operation
+        callback: returns a function which is referentially equal between renders
+        memo: calculte & returns value which referentially equal between renders
+        referential equal: values are equal a do not trigger a re-render --> great form optimization
+
+        differences:
+            memo calculate & returns the value
+            callback do not call it save it for later uses
+            memo: returns a value
+            callback: return a function that can executed with an assigned value
+
+            if i want to memoize a function save for later & do it call right away --> callback
+            if i want to memoize a value (from a calculated function) --> memo 
